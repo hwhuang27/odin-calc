@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body {
+    margin: 64px 0;
+    font-family: Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-basis: 100px;
+}
+
+textarea:focus,
+input:focus {
+    outline: none;
+}
+
+.container{
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+}
+
+.calc-button{
+    box-sizing: border-box;
+    display: inline;
+    background-color: silver;
+    border: solid black 1px;
+    font-size: 24px;
+
+}
