@@ -1,7 +1,16 @@
+
+let buttonText = [
+    'C', '%', '←', '7',
+    '8', '9', '÷', '4',
+    '5', '6', 'x', '1',
+    '2', '3', '-', '+/-',
+    '0', '.', '+', '='
+]
+
 function add(a, b) {return a + b};
 function subtract(a, b) {return a - b};
 function multiply(a, b) {return a * b};
-function divide(a, b) {return a / b};
+function divide(a, b) {return b === 0 ? 'nice try' : a / b};
 
 function operate(operator, a, b){
     switch(operator){
@@ -16,13 +25,58 @@ function operate(operator, a, b){
     }
 }
 
-let buttonText = [
-    'C', '%', '←', '7',
-    '8', '9', '÷', '4',
-    '5', '6', 'x', '1',
-    '2', '3', '-', '+/-',
-    '0', '.', '+', '='
-]
+function clearDisplay() {
+    display.textContent = "0";
+    firstValue = 0;
+    secondValue = 0;
+    operator = "";
+}
+
+function displayResult() {
+    if (operator) {
+        secondValue = parseFloat(display.textContent);
+        console.log(firstValue);
+        console.log(secondValue);
+        result = operate(operator, firstValue, secondValue);
+        if (result.toString().length > 11){
+            result = result.toString().slice(0, 12);
+        }
+        console.log(result);
+        display.textContent = "";
+        display.textContent = result;
+        operator = "";
+    }
+}
+
+function displayPercent(){
+    firstValue = display.textContent;
+    secondValue = 100;
+    result = operate('÷', firstValue, secondValue);
+    if (result.toString().length > 11) {
+        result = result.toString().slice(0, 12);
+    }
+    display.textContent = result;
+    operator = "";
+}
+
+function displayBackspace(){
+    display.textContent = display.textContent.slice(0, -1);
+}
+
+function displayDecimal() {
+    if (!display.textContent.includes('.') && display.textContent.length < 12){
+        display.textContent += '.';
+    }
+}
+
+function displayInverse(){
+    if (!display.textContent.includes('-') && display.textContent.length < 12) {
+        display.textContent = '-' + display.textContent;
+    }
+    else{
+        display.textContent = display.textContent.slice(1);
+    }
+}
 
 let buttons = document.querySelector('.container');
 let display = document.querySelector('.display');
@@ -30,55 +84,93 @@ let firstValue = 0;
 let secondValue = 0;
 let result = 0;
 let operator = "";
-
+ 
 buttonText.forEach(symbol => {
     const button = document.createElement('button');
-    const dispLen = display.textContent.length; // check for max 12 characters later
-
     button.textContent = symbol;
     button.setAttribute('type', 'button');
     button.classList.add('calc-button');
 
     if (symbol === 'C'){
         button.classList.add('calc-clear');
-        button.addEventListener('click', () => {
-            display.textContent = "0";
-            firstValue = 0;
-        });
+        button.addEventListener('click', clearDisplay);
+    }
+    else if (symbol === '%'){
+        button.addEventListener('click', displayPercent);
+    }
+    else if (symbol === '←'){
+        button.addEventListener('click', displayBackspace);
+    }
+    else if (symbol === '.'){
+        button.addEventListener('click', displayDecimal);
+    }
+    else if (symbol === '+/-'){
+        button.addEventListener('click', displayInverse);
     }
     else if (symbol === '='){
         button.classList.add('calc-equals');
-        button.addEventListener('click', () => {
-            if(operator){
-                secondValue = parseInt(display.textContent);
-                console.log(firstValue);
-                console.log(secondValue);
-                result = operate(operator, firstValue, secondValue);
-                console.log(result);
-                display.textContent = result;
-                operator = ""
-            }
-        });
+        button.addEventListener('click', displayResult);
     }
     else if (symbol === '÷' || symbol === 'x' || symbol === '-' || symbol === '+'){
         button.classList.add('calc-arithmetic');
         button.addEventListener('click', () => {
             if(!operator){
-                firstValue = parseInt(display.textContent);
+                firstValue = parseFloat(display.textContent) ? parseFloat(display.textContent) : 0;
                 operator = symbol;
                 display.textContent = "0";
             }
         });
     }
-    else if (parseInt(symbol) >= 0 && parseInt(symbol) < 10) {
+    else if (parseFloat(symbol) >= 0 && parseFloat(symbol) < 10) {
         button.addEventListener('click', () => {
-            if(display.textContent === '0'){
+            if(display.textContent === '0' || display.textContent === 'haha nice try'){
                 display.textContent = "";
+            }
+            if (display.textContent.length > 11){
+                return;
             }
             display.textContent += symbol;
         });
+
     }
     
     buttons.appendChild(button);
 });
 
+window.addEventListener('keydown', (e) => {
+    console.log(e.key);
+    switch(e.key){
+        case 'c':
+            clearDisplay();
+            break;
+        case 'p':
+            displayPercent();
+            break;
+        case 'Backspace':
+            displayBackspace();
+            break;
+        case '.':
+            displayDecimal();
+            break;
+        case '-':
+            displayInverse();
+            break;
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+        case '0':
+            if(display.textContent === '0'){
+                display.textContent = e.key;
+            }
+            else{
+                display.textContent += e.key;
+            }
+    }
+
+});

@@ -49,6 +49,13 @@ body {
     width: 54px;
 }
 
+.calc-button:active{
+    background-color: rgb(67, 67, 67);
+}
+.calc-button:active:not(.calc-equals) {
+    font-size: 22px;
+}
+
 .calc-arithmetic{
     color: greenyellow;
 }
