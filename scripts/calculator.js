@@ -1,10 +1,10 @@
 
 let buttonText = [
     'C', '%', '←', '7',
-    '8', '9', '÷', '4',
-    '5', '6', 'x', '1',
-    '2', '3', '-', '+/-',
-    '0', '.', '+', '='
+    '8', '9', '+', '4',
+    '5', '6', '-', '1',
+    '2', '3', 'x', '+/-',
+    '0', '.', '÷', '='
 ]
 
 function add(a, b) {return a + b};
@@ -36,13 +36,13 @@ function displayResult() {
     if (operator) {
         secondValue = parseFloat(display.textContent);
         console.log(firstValue);
+        console.log(operator);
         console.log(secondValue);
         result = operate(operator, firstValue, secondValue);
         if (result.toString().length > 11){
             result = result.toString().slice(0, 12);
         }
         console.log(result);
-        display.textContent = "";
         display.textContent = result;
         operator = "";
     }
@@ -138,6 +138,7 @@ buttonText.forEach(symbol => {
 });
 
 window.addEventListener('keydown', (e) => {
+    e.preventDefault();
     console.log(e.key);
     switch(e.key){
         case 'c':
@@ -146,14 +147,37 @@ window.addEventListener('keydown', (e) => {
         case 'p':
             displayPercent();
             break;
-        case 'Backspace':
-            displayBackspace();
+        case 'i':
+            displayInverse();
             break;
         case '.':
             displayDecimal();
             break;
+        case 'Backspace':
+            displayBackspace();
+            break;
+        case '+':
         case '-':
-            displayInverse();
+        case 'x':
+        case '/':
+            if (!operator) {
+                firstValue = parseFloat(display.textContent) ? parseFloat(display.textContent) : 0;
+                switch (e.key){
+                    case '+':
+                        operator = '+';
+                        break;
+                    case '-':
+                        operator = '-';
+                        break;
+                    case 'x':
+                        operator = 'x';
+                        break;
+                    case '/':
+                        operator = '÷';
+                        break;
+                }
+                display.textContent = "0";
+            }
             break;
         case '1':
         case '2':
@@ -168,9 +192,13 @@ window.addEventListener('keydown', (e) => {
             if(display.textContent === '0'){
                 display.textContent = e.key;
             }
-            else{
+            else if (display.textContent.length < 12){
                 display.textContent += e.key;
             }
+            break;
+        case 'Enter':
+            displayResult();
+            break;
     }
 
 });

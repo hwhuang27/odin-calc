@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
 body {
-    margin: 240px 0;
+    margin: 128px 0;
     font-family: Roboto, sans-serif;
     display: flex;
     flex-direction: column;
@@ -67,4 +67,26 @@ body {
 .calc-equals{
     color: cyan;
     font-size: 36px;
+}
+
+h1 {
+    margin: 36px 0 0;
+}
+
+ul{
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 960px;
+    margin: 8px 0;
+}
+
+li{
+    padding: 12px;
+    margin: 12px;
+    background-color: silver;
+    border-radius: 8px;
+    font-size: 18px;
 }
